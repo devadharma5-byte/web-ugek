@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Cinta Spesial</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+      overflow: hidden;
+      text-align: center;
+      color: #fff;
+    }
+
+    h1, h2 {
+      animation: fadeIn 1s ease-in;
+    }
+
+    #quiz-box {
+      margin-top: 120px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      border-radius: 20px;
+      display: inline-block;
+      backdrop-filter: blur(10px);
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    button {
+      background: #ff5fa2;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s, background 0.3s;
+    }
+    button:hover {
+      background: #ff2e74;
+      transform: scale(1.1);
+    }
+
+    .heart {
+      position: fixed;
+      top: -10px;
+      color: #ff5fa2;
+      font-size: 20px;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    /* kembang api */
+    .firework {
+      position: fixed;
+      width: 5px;
+      height: 5px;
+      background: transparent;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      from { transform: scale(0); opacity: 1; }
+      to { transform: scale(15); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Halo! Siap main quiz cinta? 😍</h1>
+  <div id="quiz-box">
+    <h2 id="question">Klik tombol mulai dulu yaa 💕</h2>
+    <button onclick="nextQuestion()">Mulai dong!</button>
+  </div>
+
+  <!-- musik -->
+  <audio id="bg-music" autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const questions = [
+      {
+        q: "Kalau kita jadi superhero, ugek pilih: 🦸‍♂️ Terbang keliling dunia bareng atau 🛡️ makan bakso sambil jaga lilin?",
+        a: ["Terbang bareng ✈️", "Makan bakso 🍜"]
+      },
+      {
+        q: "Kalau depa lagi ngambek kayak kucing, ugek bakal: 🐱 belai biar diem atau 🐟 kasih ikan biar nurut?",
+        a: ["Belai aja 😘", "Kasih ikan 🐟"]
+      },
+      {
+        q: "Kalau depa jadi guling, ugek bakal: 🤗 peluk tiap malam atau 😴 tendang kalo tidur gelisah?",
+        a: ["Peluk tiap malam 💕", "Ehh tendang dikit 😆"]
+      },
+      {
+        q: "Kalau kita kejebak di lift, ugek pilih: 🎶 nyanyi bareng biar nggak bosan atau 💃 joget bareng sampe pintu kebuka?",
+        a: ["Nyanyi bareng 🎤", "Joget bareng 💃"]
+      },
+      {
+        q: "Oke sekarang pertanyaan serius 😏… Mau nggak ugek jadi pacar depa? ❤️",
+        a: ["mau banget 💖", "mau dong masa nggak 😍"]
+      }
+    ];
+
+    let current = -1;
+    const quizBox = document.getElementById("quiz-box");
+
+    function nextQuestion(choice) {
+      current++;
+
+      // kalau pertanyaan habis → tampilin hasil
+      if (current >= questions.length) {
+        quizBox.innerHTML = `<h2 style="animation:fadeIn 1s">💕 Makasih udah jawab... 💕<br><br> Jadi... kita resmi pacaran kan? YEYYYYY!!!!!! 😍🎇</h2>`;
+        fireworkShow();
+        return;
+      }
+
+      // tampilkan pertanyaan + jawaban
+      quizBox.innerHTML = `<h2 style="animation:fadeIn 1s">${questions[current].q}</h2>`;
+      questions[current].a.forEach(ans => {
+        const btn = document.createElement("button");
+        btn.innerText = ans;
+        btn.onclick = () => nextQuestion(ans);
+        quizBox.appendChild(btn);
+      });
+    }
+
+    // efek hati jatuh
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 15 + "px";
+      heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 400);
+
+    // efek kembang api
+    function fireworkShow() {
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          const fw = document.createElement("div");
+          fw.className = "firework";
+          fw.style.left = Math.random() * 100 + "vw";
+          fw.style.top = Math.random() * 100 + "vh";
+          fw.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+          document.body.appendChild(fw);
+          setTimeout(() => fw.remove(), 1000);
+        }, i * 200);
+      }
+    }
+  </script>
+</body>
+</html>
